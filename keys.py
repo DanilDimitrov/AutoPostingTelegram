@@ -1,0 +1,69 @@
+import re
+
+from aiogram.types import Message
+
+API_ID = 22879221
+API_HASH = "77a7cb48de2329dfa0bab369cd084962"
+PROD_API_ID = 28640102
+PROD_API_HASH = "ae3821b446c57a6725347b12ab6aa93b"
+
+
+en_sites = ["https://cryptonews.net/",
+            "https://ihodl.com/",
+            "https://cointelegraph.com/",
+            "https://www.coindesk.com/",
+            "https://bitcoinist.com/",
+            "https://decrypt.co/"]
+
+TOKEN = "7185238306:AAEBa4LnNjrssqSfz6UR87MigP-fCvo6iz0"
+keys = ["#BTC", "#Binance", "#LTC", "#listing", "#airdrop"]
+ad = ["ad", "partner", "promotion", "learn more", "to learn more",
+      "exchanges", "free", "win", "reward", "insider", "subscription",
+      "exclusive", "special", "vip", "premium", "limited",
+      "invitation", "join", "coach", "channel", "product", "play", "bot", "draw", "network",
+      "реклама", "партнер", "повышение", "узнать больше", "обмен", "бесплатн", "побед",
+      "наград", "инсайдер", "подписк", "премиум", "ограниченное", "эксклюзивн", "особенн",
+      "приглашен", "присоедин", "тренер", "канал", "продукт", "игра", "бот", "розыгрыш", "social",
+      "сеть", "социальная", "detail", "детали", "link", "ссылк"]
+
+
+def contains_keywords(message_text):
+    message_text = message_text
+    for keyword in keys:
+        if keyword.lower() in message_text:
+            return True
+    return False
+
+
+def containsAD(message_text):
+    message_text = message_text
+    for key in ad:
+        if key.lower() in message_text:
+            return False
+    return False
+
+
+def validate_photo_and_len(message: Message):
+    if len(message.caption) > 100 and message.photo:
+        return True
+    elif len(message.caption) > 100 and not message.photo:
+        return True
+    else:
+        return False
+
+
+def remove_links_and_text(html_text):
+    pattern = r'<a\s+(?:[^>]*?\s+)?href="([^"]*)"([^>]*)>(.*?)</a>'
+
+    def replace_link_and_text(match):
+        return ''
+
+    cleaned_text = re.sub(pattern, replace_link_and_text, html_text)
+    return cleaned_text
+
+
+def find_word_in_text(word_array, text):
+    for word in word_array:
+        if word in text:
+            return word
+    return None
