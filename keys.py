@@ -15,7 +15,7 @@ en_sites = ["https://cryptonews.net/",
             "https://bitcoinist.com/",
             "https://decrypt.co/"]
 
-TOKEN = "7185238306:AAEBa4LnNjrssqSfz6UR87MigP-fCvo6iz0"
+TOKEN = "7156398040:AAHkMiQ4ORAaN3OnXqK0hr45KaTWY1D9QCI"
 keys = ["#BTC", "#Binance", "#LTC", "#listing", "#airdrop"]
 ad = ["ad", "partner", "promotion", "learn more", "to learn more",
       "exchanges", "free", "win", "reward", "insider", "subscription",

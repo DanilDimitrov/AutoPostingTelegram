@@ -22,7 +22,7 @@ dp = Dispatcher()
 scheduler = AsyncIOScheduler()
 
 message_id = 0
-saitUrl = "http://138.201.33.30:5555"
+saitUrl = "http://127.0.0.1:8000"
 
 
 async def clear_jobs():
@@ -76,8 +76,8 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         caption = f"{post_content_for_current_post['title']} {post_content_for_current_post['description']}"
         image = post_content_for_current_post['image_url']
         print(f"{saitUrl}{image}")
-
-        await sendMessage(name_channel_id, caption, f"{saitUrl}{image}")
+       # await sendMessage(name_channel_id, caption, f"{saitUrl}{image}")
+        await sendMessage(name_channel_id, caption, f"https://cdn.litemarkets.com/cache/uploads/blog_post/blog_posts/BTC_Price_Analysis/Bitcoin-Price-Prediction.jpg?q=75&w=1000&s=6c20e77623d5230b4c2fdd5d461b9feb")
         # scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
         #                   args=[name_channel_id, caption, image])
 
@@ -87,8 +87,9 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
             crosslink_time_for_current_post += timedelta(hours=i * crosslink_delta)
             print(f"crosslink_time_for_current_post: {crosslink_time_for_current_post}")
             if crosslink_1_id:
-                scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
-                                  args=[name_channel_id, crosslink_1_id, message_id])
+                # scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                #                   args=[name_channel_id, crosslink_1_id, message_id])
+                await forwardMessage(name_channel_id, crosslink_1_id)
             elif crosslink_2_id:
                 scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
                                   args=[name_channel_id, crosslink_2_id, message_id])

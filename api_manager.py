@@ -4,10 +4,10 @@ from PIL import Image
 
 to_generate_image = "http://138.201.33.30:5555/generate_image"
 to_generate_text = "http://138.201.33.30:5555/generate_text"
-get_all_themes = "http://138.201.33.30:5555/themes"
-get_all_channels = "http://138.201.33.30:5555/channels"
-get_parsed_item = "http://138.201.33.30:5555/get_ParsedItems"
-create_parse_item = "http://138.201.33.30:5555/create_parse_item/"
+get_all_themes = "http://127.0.0.1:8000/themes"
+get_all_channels = "http://127.0.0.1:8000/channels"
+get_parsed_item = "http://127.0.0.1:8000/get_ParsedItems"
+create_parse_item = "http://127.0.0.1:8000/create_parse_item/"
 
 API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
 headers = {"Authorization": "Bearer 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"}
