@@ -1,10 +1,5 @@
 import json
 from datetime import timedelta, datetime
-from io import BytesIO
-
-from PIL import Image
-from aiogram.types import InputFile
-import requests
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from api_manager import getAllChannels, getParseItem
@@ -35,7 +30,6 @@ async def sendMessage(chat_id, message, image):
     message_id = message_obj.message_id
 
 
-
 async def forwardMessage(sourceChatId, targetChatId):
     global message_id
     await bot.forward_message(chat_id=targetChatId, from_chat_id=sourceChatId, message_id=message_id)
@@ -60,7 +54,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
     await parse(list_links_tg_parsing, name_channel)
 
     # Получение из django db
-    parse_result = getParseItem(name_channel)
+    parse_result = sorted(getParseItem(name_channel), key=lambda x: x["date"], reverse=True)
 
     total_posts = post_quantity + post_quantity_delta
     initial_post_time = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -76,26 +70,27 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         caption = f"{post_content_for_current_post['title']} {post_content_for_current_post['description']}"
         image = post_content_for_current_post['image_url']
         print(f"{saitUrl}{image}")
-       # await sendMessage(name_channel_id, caption, f"{saitUrl}{image}")
-        await sendMessage(name_channel_id, caption, f"https://cdn.litemarkets.com/cache/uploads/blog_post/blog_posts/BTC_Price_Analysis/Bitcoin-Price-Prediction.jpg?q=75&w=1000&s=6c20e77623d5230b4c2fdd5d461b9feb")
-        # scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
-        #                   args=[name_channel_id, caption, image])
+        # await sendMessage(name_channel_id, caption, f"https://cdn.litemarkets.com/cache/uploads/blog_post/blog_posts/BTC_Price_Analysis/Bitcoin-Price-Prediction.jpg?q=75&w=1000&s=6c20e77623d5230b4c2fdd5d461b9feb")
+        scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
+                          args=[name_channel_id, caption,
+                                f"https://cdn.litemarkets.com/cache/uploads/blog_post/blog_posts/BTC_Price_Analysis/Bitcoin-Price-Prediction.jpg?q=75&w=1000&s=6c20e77623d5230b4c2fdd5d461b9feb"])
 
         if crosslink:
             crosslink_time_for_current_post = current_time + timedelta(hours=crosslink_time)
             current_time = crosslink_time_for_current_post
             crosslink_time_for_current_post += timedelta(hours=i * crosslink_delta)
             print(f"crosslink_time_for_current_post: {crosslink_time_for_current_post}")
-            if crosslink_1_id:
-                # scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
-                #                   args=[name_channel_id, crosslink_1_id, message_id])
-                await forwardMessage(name_channel_id, crosslink_1_id)
-            elif crosslink_2_id:
-                scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
-                                  args=[name_channel_id, crosslink_2_id, message_id])
-            elif crosslink_3_id:
-                scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
-                                  args=[name_channel_id, crosslink_3_id, message_id])
+            if message_id != 0:
+                if crosslink_1_id:
+                    scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                                      args=[name_channel_id, crosslink_1_id])
+                    await forwardMessage(name_channel_id, crosslink_1_id)
+                elif crosslink_2_id:
+                    scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                                      args=[name_channel_id, crosslink_2_id])
+                elif crosslink_3_id:
+                    scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                                      args=[name_channel_id, crosslink_3_id])
 
 
 async def generate_posts():
@@ -113,8 +108,8 @@ async def generate_posts():
 
 async def mainFunc():
     scheduler.add_job(clear_jobs, 'cron', hour=12, minute=0, second=0, timezone='UTC')
-    #scheduler.add_job(generate_posts, 'cron', hour=12, minute=0, second=0, timezone='UTC')
-    await generate_posts()
+    # scheduler.add_job(generate_posts, 'cron', hour=12, minute=0, second=0, timezone='UTC')
+    scheduler.add_job(generate_posts, 'cron', hour=12, minute=0, second=0, timezone='UTC')
     await dp.start_polling(bot)
 
 
