@@ -22,7 +22,7 @@ dp = Dispatcher()
 scheduler = AsyncIOScheduler()
 
 message_id = 0
-saitUrl = "http://127.0.0.1:8000"
+saitUrl = "http://138.201.33.30:5555"
 
 
 async def clear_jobs():
