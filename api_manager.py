@@ -36,7 +36,7 @@ def generateImage(prompt):
             print('Error:', response.status_code)
 
 
-def generateText(prompt):
+def generateText(prompt)-> str:
     data_to_load = {"prompt": prompt}
     response = requests.post(to_generate_text, json=data_to_load)
     if response.status_code == 200:
