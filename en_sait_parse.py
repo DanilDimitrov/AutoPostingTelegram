@@ -257,5 +257,4 @@ def parse_decrypt_article():
     else:
         print("Failed.")
 
-parse_decrypt_article()
 
