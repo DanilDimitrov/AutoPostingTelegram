@@ -6,6 +6,8 @@ from pyrogram import Client
 from deep_translator import GoogleTranslator
 
 
+images = ["BTC", "ETH"]
+
 def translateText(target_language_for_google, text):
     translated_text = GoogleTranslator(source='auto', target=target_language_for_google).translate(text)
     return translated_text
@@ -36,7 +38,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         message_date = datetime.datetime.strptime(str(message.date), "%Y-%m-%d %H:%M:%S")
                         milliseconds = message_date.timestamp() * 1000
                         image = generateImage(
-                            f"{title} crypto photo, btc, etherium, blockchain, cinematic, nft, crypto, ")
+                            f"{title} crypto photo, btc, etherium, blockchain, nft, crypto, no text")
 
                         if language == "Russian":
                             title = translateText('ru', title)
@@ -81,3 +83,5 @@ async def parse(channels_en_id: dict, channel_go_to, language):
             await clone_content(client, channel_id, themes, channel_name, channel_go_to, language)
     finally:
         await client.stop()
+
+
