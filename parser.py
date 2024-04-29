@@ -11,7 +11,7 @@ def translateText(target_language_for_google, text):
     return translated_text
 
 
-async def clone_content(client, source_channel_id: int, themes, source_channel_name: str, channel_go_to:str, language):
+async def clone_content(client, source_channel_id: int, themes, source_channel_name: str, channel_go_to: str, language):
     try:
         messages = client.get_chat_history(chat_id=source_channel_id, limit=1)
         async for message in messages:
@@ -36,7 +36,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         message_date = datetime.datetime.strptime(str(message.date), "%Y-%m-%d %H:%M:%S")
                         milliseconds = message_date.timestamp() * 1000
                         image = generateImage(
-                            f"{title}, crypto photo, btc, etherium, blockchain, cinematic, nft, crypto, ")
+                            f"crypto photo, btc, etherium, blockchain, cinematic, nft, crypto, ")
 
                         if language == "Russian":
                             title = translateText('ru', title)
@@ -72,8 +72,6 @@ async def get_last_message_id(channel_id) -> int:
         await client.stop()
 
 
-
-
 async def parse(channels_en_id: dict, channel_go_to, language):
     client = Client(name='client', api_id=API_ID, api_hash=API_HASH)
     await client.start()
@@ -83,4 +81,3 @@ async def parse(channels_en_id: dict, channel_go_to, language):
             await clone_content(client, channel_id, themes, channel_name, channel_go_to, language)
     finally:
         await client.stop()
-

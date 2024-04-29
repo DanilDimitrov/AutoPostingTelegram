@@ -16,7 +16,7 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher()
 scheduler = AsyncIOScheduler()
 
-saitUrl = "http://127.0.0.1:8000"
+saitUrl = "http://138.201.33.30:999/"
 
 
 async def clear_jobs():
@@ -25,8 +25,6 @@ async def clear_jobs():
 
 async def sendMessage(chat_id, message, image):
     await bot.send_photo(chat_id=chat_id, caption=message, photo=image)
-
-
 
 
 async def forwardMessage(sourceChatId, targetChatId):
@@ -86,7 +84,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         print(f"{saitUrl}{image}")
         scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
                           args=[name_channel_id, caption,
-                                f"https://cdn.litemarkets.com/cache/uploads/blog_post/blog_posts/BTC_Price_Analysis/Bitcoin-Price-Prediction.jpg?q=75&w=1000&s=6c20e77623d5230b4c2fdd5d461b9feb",
+                                f"{saitUrl}{image}"
                                 ])
         crosslinkTg(crosslink, post_time_for_current_post,
                     crosslink_time, crosslink_1_id, name_channel_id,
@@ -125,9 +123,9 @@ async def generate_posts():
 
 
 async def mainFunc():
-    await generate_posts()
-    scheduler.add_job(clear_jobs, 'cron', hour=23, minute=58, second=0, timezone='Europe/Kiev')
-    #scheduler.add_job(generate_posts, 'cron', hour=12, minute=37, second=0, timezone='Europe/Kiev')
+    # await generate_posts()
+    scheduler.add_job(clear_jobs, 'cron', hour=23, minute=50, second=0, timezone='Europe/Kiev')
+    scheduler.add_job(generate_posts, 'cron', hour=23, minute=57, second=0, timezone='Europe/Kiev')
     scheduler.start()
     await dp.start_polling(bot)
 
