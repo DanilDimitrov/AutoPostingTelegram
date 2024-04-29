@@ -100,4 +100,7 @@ def getAllChannels():
     else:
         print('Error:', response.status_code)
 
+image = generateImage("crypto photo, btc, etherium, blockchain, nft, crypto, ")
+image.save("out.png")
+
 

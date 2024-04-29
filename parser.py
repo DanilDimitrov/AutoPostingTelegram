@@ -36,7 +36,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         message_date = datetime.datetime.strptime(str(message.date), "%Y-%m-%d %H:%M:%S")
                         milliseconds = message_date.timestamp() * 1000
                         image = generateImage(
-                            f"crypto photo, btc, etherium, blockchain, cinematic, nft, crypto, ")
+                            f"{title} crypto photo, btc, etherium, blockchain, cinematic, nft, crypto, ")
 
                         if language == "Russian":
                             title = translateText('ru', title)
