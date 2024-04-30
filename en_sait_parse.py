@@ -189,41 +189,6 @@ def parse_bitcoinist_article():
         print("Failed.")
 
 
-def parse_last_bitcoinist():
-    html_content = get_html_content(bitcoinist)
-    if html_content:
-        soup = BeautifulSoup(html_content, 'html.parser')
-        articles = soup.find_all('div', class_='jeg_thumb')
-        if articles:
-            article = articles[0]
-            a = article.find_all('a')
-            href = a[0].get('href')
-            to_article = f"{href}"
-            return to_article
-        else:
-            print("No <p>")
-    else:
-        print("Failed.")
-def parse_bitcoinist_article():
-    html_content = get_html_content(parse_last_bitcoinist())
-    if html_content:
-        soup = BeautifulSoup(html_content, 'html.parser')
-        divs = soup.find_all('div', class_='content-inner')
-        if divs:
-            article = divs[0]
-            paragraphs = article.find_all('p')
-            text_paragraphs = [p for p in paragraphs if p.text.strip()]
-            post = ""
-            for p in text_paragraphs:
-                post += p.text.strip()
-            print(post)
-            return post
-        else:
-            print("No <p>")
-    else:
-        print("Failed.")
-
-
 def parse_last_decrypt():
     html_content = get_html_content(decrypt)
     if html_content:

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 forklog = "https://forklog.com"
-coindesk = "https://www.coindesk.com/ru"
+coindeskru = "https://www.coindesk.com/ru"
 coinspot = "https://coinspot.io/"
 ttrcoin = "https://ttrcoin.com/"
 altcoinlog = "https://altcoinlog.com/"
@@ -57,20 +57,20 @@ def parse_forklog():
 
 
 def parse_last_coindesk_articles():
-    html_content = get_html_content(coindesk)
+    html_content = get_html_content(coindeskru)
     if html_content:
         soup = BeautifulSoup(html_content, 'html.parser')
         article = soup.find_all('div', class_='featured-cardstyles__FeaturedCardWrapper-sc-caozbq-2 cRlwbG')
         href = article[0].find_all('a', class_='card-imagestyles__CardImageWrapper-sc-1kbd3qh-0 WDSwd')[0]
         if href:
-            href = f"{coindesk.replace('/ru', '')}{href.get('href')}"
+            href = f"{coindeskru.replace('/ru', '')}{href.get('href')}"
             print(href)
             return href
         else:
             print("No <p>.")
     else:
         print("Failed.")
-def parse_coindesk_article():
+def parse_coindesk_articleru():
     html_content = get_html_content(parse_last_coindesk_articles())
     if html_content:
         soup = BeautifulSoup(html_content, 'html.parser')

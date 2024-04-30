@@ -2,21 +2,14 @@ import re
 
 from aiogram.types import Message
 
-#API_ID = 22879221
-#API_HASH = "77a7cb48de2329dfa0bab369cd084962"
-API_ID = 28640102
-API_HASH = "ae3821b446c57a6725347b12ab6aa93b"
+API_ID = 22879221
+API_HASH = "77a7cb48de2329dfa0bab369cd084962"
+#API_ID = 28640102
+#API_HASH = "ae3821b446c57a6725347b12ab6aa93b"
 
 
-en_sites = ["https://cryptonews.net/",
-            "https://ihodl.com/",
-            "https://cointelegraph.com/",
-            "https://www.coindesk.com/",
-            "https://bitcoinist.com/",
-            "https://decrypt.co/"]
-
-#TOKEN = "7156398040:AAHkMiQ4ORAaN3OnXqK0hr45KaTWY1D9QCI"
-TOKEN = "6506417602:AAEoALt6bdbgC_rsTjxUNSGh5VGxP8nIVKo"
+TOKEN = "7156398040:AAHkMiQ4ORAaN3OnXqK0hr45KaTWY1D9QCI"
+#TOKEN = "6506417602:AAEoALt6bdbgC_rsTjxUNSGh5VGxP8nIVKo"
 
 
 keys = ["#BTC", "#Binance", "#LTC", "#listing", "#airdrop"]

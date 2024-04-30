@@ -4,13 +4,17 @@ from PIL import Image
 
 to_generate_image = "http://138.201.33.30:5555/generate_image"
 to_generate_text = "http://138.201.33.30:5555/generate_text"
-get_all_themes = "http://138.201.33.30:999/themes"
-get_all_channels = "http://138.201.33.30:999/channels"
-get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
-create_parse_item = "http://138.201.33.30:999/create_parse_item/"
+# get_all_themes = "http://138.201.33.30:999/themes"
+# get_all_channels = "http://138.201.33.30:999/channels"
+# get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
+# create_parse_item = "http://138.201.33.30:999/create_parse_item/"
+get_all_themes = "http://127.0.0.1:8000/themes"
+get_all_channels = "http://127.0.0.1:8000/channels"
+get_parsed_item = "http://127.0.0.1:8000/get_ParsedItems"
+create_parse_item = "http://127.0.0.1:8000/create_parse_item/"
 
 API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": "Bearer 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"}
 
 
 def query(payload):
@@ -41,6 +45,7 @@ def generateText(prompt)-> str:
     response = requests.post(to_generate_text, json=data_to_load)
     if response.status_code == 200:
         data: list = response.json()
+        print(data)
         parse_data = data[0]["generated_text"]
         return parse_data
     else:
@@ -100,7 +105,6 @@ def getAllChannels():
     else:
         print('Error:', response.status_code)
 
-image = generateImage("crypto photo, btc, etherium, blockchain, nft, crypto, ")
-image.save("out.png")
+
 
 
