@@ -6,7 +6,6 @@ from pyrogram import Client
 from deep_translator import GoogleTranslator
 
 
-images = ["BTC", "ETH"]
 
 def translateText(target_language_for_google, text):
     translated_text = GoogleTranslator(source='auto', target=target_language_for_google).translate(text)
@@ -19,10 +18,8 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
         async for message in messages:
             if message.caption:
                 try:
-                    if not containsAD(message.caption.lower()) and validate_photo_and_len(message):
-                        data_for_gpt = """rephrase this text in other words, 
-                        remove all links and hyperlink, 
-                        remove all references to social networks from the text"""
+                    if not containsAD(message.caption.lower()):
+                        data_for_gpt = """rephrase this text in other words"""
                         data_for_title = "give a theme for this text in 5 words"
                         query_to_GPT = f" {data_for_gpt} {message.caption}"
                         description: str = generateText(query_to_GPT)
@@ -32,15 +29,19 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                                           f", give a simple answer where there will only be a topic")
 
                         title = generateText(f"{data_for_title} {description}")
+                        generateImagePrompt = f"generate prompt for generate beauty crypto image with this text: {title}"
+                        print(generateImagePrompt)
+                        generateImagePromptExe = generateText(generateImagePrompt)
+
                         theme = generateText(data_for_theme)
                         theme = find_word_in_text(themes, theme)
                         print(theme)
                         message_date = datetime.datetime.strptime(str(message.date), "%Y-%m-%d %H:%M:%S")
                         milliseconds = message_date.timestamp() * 1000
                         image = generateImage(
-                            f"{title} crypto photo, btc, etherium, blockchain, nft, crypto, no text")
+                            f"{generateImagePromptExe}, crypto photo, btc, etherium, blockchain, nft, crypto, cyberpunk style, crypto cyber,")
 
-                        if language == "Russian":
+                        if language == "ru":
                             title = translateText('ru', title)
                             description = translateText('ru', description)
                         else:
@@ -57,6 +58,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         print(pars)
 
                 except:
+                    print("Error in Pars")
                     continue
 
     except Exception as e:
