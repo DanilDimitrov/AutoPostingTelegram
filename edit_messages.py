@@ -41,6 +41,7 @@ async def get_chat_history(channel_id):
 
 async def edit_posts(url, caption, post_id):
     photo = types.InputMediaPhoto(media=url, caption=caption)
+
     await bot.edit_message_media(chat_id=-1002111756303, message_id=post_id, media=photo)
 
 

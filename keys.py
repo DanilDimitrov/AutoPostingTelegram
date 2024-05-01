@@ -62,4 +62,6 @@ def find_word_in_text(word_array, text):
     for word in word_array:
         if word in text:
             return word
+        else:
+            return "crypto"
     return None

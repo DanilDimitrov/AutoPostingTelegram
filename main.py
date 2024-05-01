@@ -137,7 +137,7 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=21, minute=51, second=0, timezone='Europe/Kyiv')
+    scheduler.add_job(generate_posts, 'cron', hour=14, minute=19, second=0, timezone='Europe/Kyiv')
     scheduler.start()
     await dp.start_polling(bot)
 
@@ -146,7 +146,7 @@ if __name__ == '__main__':
         loop = asyncio.get_event_loop()
         loop.create_task(mainFunc())
         loop.run_forever()
-    except KeyboardInterrupt:
+    except:
         scheduler.shutdown()
         loop.run_until_complete(bot.close())
 

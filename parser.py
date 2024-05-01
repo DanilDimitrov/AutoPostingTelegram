@@ -60,8 +60,8 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = translateText('en', description)
 
 
-    pars = parsed_item(title=title,
-                       description=description,
+    pars = parsed_item(title=title.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
+                       description=description.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
                        date=milliseconds,
                        image=image,
                        channelParsed=sait,
