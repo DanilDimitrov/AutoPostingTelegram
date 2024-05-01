@@ -18,8 +18,8 @@ dp = Dispatcher()
 scheduler = AsyncIOScheduler()
 executor = ThreadPoolExecutor()
 
-#saitUrl = "http://138.201.33.30:999"
-saitUrl = "http://127.0.0.1:8000"
+saitUrl = "http://138.201.33.30:999"
+#saitUrl = "http://127.0.0.1:8000"
 
 
 async def clear_jobs():

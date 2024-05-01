@@ -4,14 +4,17 @@ from PIL import Image
 
 to_generate_image = "http://138.201.33.30:5555/generate_image"
 to_generate_text = "http://138.201.33.30:5555/generate_text"
-# get_all_themes = "http://138.201.33.30:999/themes"
-# get_all_channels = "http://138.201.33.30:999/channels"
-# get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
-# create_parse_item = "http://138.201.33.30:999/create_parse_item/"
-get_all_themes = "http://127.0.0.1:8000/themes"
-get_all_channels = "http://127.0.0.1:8000/channels"
-get_parsed_item = "http://127.0.0.1:8000/get_ParsedItems"
-create_parse_item = "http://127.0.0.1:8000/create_parse_item/"
+get_all_themes = "http://138.201.33.30:999/themes"
+get_all_channels = "http://138.201.33.30:999/channels"
+get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
+create_parse_item = "http://138.201.33.30:999/create_parse_item/"
+get_all_posts_url = "http://138.201.33.30:999/get_all_posts/"
+
+#get_all_posts_url = "http://127.0.0.1:8000/get_all_posts/"
+# get_all_themes = "http://127.0.0.1:8000/themes"
+# get_all_channels = "http://127.0.0.1:8000/channels"
+# get_parsed_item = "http://127.0.0.1:8000/get_ParsedItems"
+# create_parse_item = "http://127.0.0.1:8000/create_parse_item/"
 
 API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5"
 headers = {"Authorization": "Bearer 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"}
@@ -106,5 +109,13 @@ def getAllChannels():
         print('Error:', response.status_code)
 
 
+def get_all_posts() -> list:
+    response = requests.get(get_all_posts_url)
+    if response.status_code == 200:
+        data = response.json()["parsed_items"]
+        print(data)
+        return data
+    else:
+        print('Error:', response.status_code)
 
 
