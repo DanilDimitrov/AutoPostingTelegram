@@ -6,11 +6,11 @@ from deep_translator import GoogleTranslator
 from en_sait_parse import *
 from ru_sait_parse import *
 
-data_for_gpt = """rephrase this text in other words,
-                        remove all links and hyperlink, 
-                        remove all references to social networks from the text"""
-data_for_title = "give a theme for this text in 5 words"
-
+data_for_gpt = """rephrase this text in other words, remove all links and hyperlink,
+                  remove all references to social networks from the text, text without unnecessary words,
+                  I need exactly text, don’t return “Here is the rephrased text:” without your additions:"""
+data_for_title = "write the topic of this text in five words, but just write the topic without unnecessary words, I need exactly the topic, don’t return “[/INST]” without your additions:"
+data_for_tag = "write 5 hash tag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions:"
 available_saits = [cryptoNews, ihodi, cointelegraph, coindesk, bitcoinist, decrypt,
                    forklog, coinspot, coinspot, ttrcoin, altcoinlog]
 
@@ -23,6 +23,7 @@ def translateText(target_language_for_google, text):
 async def go_to_admin(themes, sait, channel_go_to, language, text):
     query_to_GPT = f" {data_for_gpt} {text}"
     desc: str = generateText(query_to_GPT)
+    hash_tags = generateText(f"{data_for_tag} {desc}")
     data_for_theme = (f"Here are all the topics I have: {themes},"
                       f" Which of these topics does this text relate to? {desc}, "
                       f"((choose only from these topics that I gave you))"
@@ -35,6 +36,7 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = desc
 
     tit = generateText(f"{data_for_title} {description}")
+    description = f"{description}\n{hash_tags}"
     if len(tit) >= 12:
         title = ' '.join(tit.split()[:12])
         print(len(title))
@@ -60,7 +62,7 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = translateText('en', description)
 
 
-    pars = parsed_item(title=title.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
+    pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
                        description=description.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
                        date=milliseconds,
                        image=image,
@@ -115,8 +117,8 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = translateText('en', title)
                             description = translateText('en', description)
 
-                        pars = parsed_item(title=title,
-                                           description=description,
+                        pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
+                                           description=description.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
                                            date=milliseconds,
                                            image=image,
                                            channelParsed=source_channel_name,

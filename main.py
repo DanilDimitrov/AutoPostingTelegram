@@ -40,6 +40,7 @@ async def forwardMessage(sourceChatId, targetChatId):
 
 
 async def generate_posts_schedule(channel, post_time, post_time_delta, post_quantity, post_quantity_delta):
+    try:
         name_channel: str = channel["name"]
         name_channel_id: str = channel["name_id"]
         language: str = channel["language"]
@@ -101,6 +102,8 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
             crosslinkTg(crosslink, post_time_for_current_post,
                         crosslink_time, crosslink_1_id, name_channel_id,
                         crosslink_2_id, crosslink_3_id)
+    except Exception as ex:
+        print(f"error: {ex}")
 
 
 def crosslinkTg(crosslink, post_time_for_current_post,

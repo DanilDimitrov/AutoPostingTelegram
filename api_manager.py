@@ -10,7 +10,7 @@ get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
 create_parse_item = "http://138.201.33.30:999/create_parse_item/"
 get_all_posts_url = "http://138.201.33.30:999/get_all_posts/"
 
-#get_all_posts_url = "http://127.0.0.1:8000/get_all_posts/"
+# get_all_posts_url = "http://127.0.0.1:8000/get_all_posts/"
 # get_all_themes = "http://127.0.0.1:8000/themes"
 # get_all_channels = "http://127.0.0.1:8000/channels"
 # get_parsed_item = "http://127.0.0.1:8000/get_ParsedItems"
@@ -49,7 +49,16 @@ def generateText(prompt)-> str:
     if response.status_code == 200:
         data: list = response.json()
         print(data)
-        parse_data = data[0]["generated_text"]
+        parse_data: str = (data[0]["generated_text"].replace("Тема этого текста в 5 словах:", "")
+                          .replace("Вот тема в 5 словах:", "").replace("Тема:", "")
+                          .replace("The theme of this text in 5 words is:", "")
+                          .replace("Here is a theme for this text in 5 words:", "").replace("Theme:", "")
+                          .replace("Here is the rephrased text:", "").replace("Here is the rewritten text:", "")
+                          .replace("Here is the text rewritten in other words, without links and hyperlinks, and without references to social networks: ","")
+                          .replace("Вот перефразированный текст:", "").replace("Вот переписанный текст:", "")
+                          .replace("Вот текст, переписанный другими словами, без ссылок и гиперссылок, а также без отсылок к соцсетям:", ""))
+
+
         return parse_data
     else:
         print('Error:', response.status_code)
@@ -103,7 +112,7 @@ def getAllChannels():
     response = requests.get(get_all_channels)
     if response.status_code == 200:
         data = response.json()["channels"]
-        print(data)
+        print(f"data {data}")
         return data
     else:
         print('Error:', response.status_code)

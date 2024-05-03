@@ -2,6 +2,8 @@ import asyncio
 import logging
 
 from aiogram import Bot, types
+from deep_translator import GoogleTranslator
+
 from keys import API_ID, API_HASH, containsAD, find_word_in_text
 from pyrogram import Client
 from api_manager import get_all_posts
@@ -13,6 +15,12 @@ parse_result = []
 
 saitUrl = "http://138.201.33.30:999"
 #saitUrl = "http://127.0.0.1:8000"
+
+
+def translateText(target_language_for_google, text):
+    translated_text = GoogleTranslator(source='auto', target=target_language_for_google).translate(text)
+    return translated_text
+
 
 def get_posts():
     parse_result_no_unique = get_all_posts()
@@ -40,8 +48,11 @@ async def get_chat_history(channel_id):
 
 
 async def edit_posts(url, caption, post_id):
-    photo = types.InputMediaPhoto(media=url, caption=caption)
-
+    image = types.URLInputFile(
+        url, filename="image.png"
+    )
+    captionTrans = translateText("ru", caption)
+    photo = types.InputMediaPhoto(media=image, caption=captionTrans, filename="image.png")
     await bot.edit_message_media(chat_id=-1002111756303, message_id=post_id, media=photo)
 
 
@@ -54,10 +65,11 @@ async def mainFunc():
         try:
             cap = (post['title'] + post['description']).split()
             caption = ' '.join(cap[:100])
-            print(f"{saitUrl}{post['image_url']}")
-
-            await edit_posts(f"{saitUrl}{post['image_url']}", caption, post_id)
-        except:
+            photo_url = f"{saitUrl}{post['image_url']}"
+            print(photo_url)
+            await edit_posts(photo_url, caption, post_id)
+        except Exception as ex:
+            print(ex)
             continue
 
 
