@@ -21,19 +21,18 @@ def translateText(target_language_for_google, text):
 
 
 async def go_to_admin(themes, sait, channel_go_to, language, text):
-    query_to_GPT = f" {data_for_gpt} {text}"
-    desc: str = generateText(query_to_GPT)
-    hash_tags = generateText(f"{data_for_tag} {desc}")
+    if len(text) >= 1000:
+        capt = text[:700]
+    else:
+        capt = text
+
+    query_to_GPT = f" {data_for_gpt} {capt}"
+    description: str = generateText(query_to_GPT)
+    hash_tags = generateText(f"{data_for_tag} {description}")
     data_for_theme = (f"Here are all the topics I have: {themes},"
-                      f" Which of these topics does this text relate to? {desc}, "
+                      f" Which of these topics does this text relate to? {description}, "
                       f"((choose only from these topics that I gave you))"
                       f", give a simple answer where there will only be a topic")
-
-    if len(desc) >= 240:
-        description = ' '.join(desc.split()[:240])
-        print(len(desc))
-    else:
-        description = desc
 
     tit = generateText(f"{data_for_title} {description}")
     description = f"{description}\n{hash_tags}"
@@ -61,9 +60,9 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         title = translateText('en', title)
         description = translateText('en', description)
 
-
     pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                       description=description.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
+                       description=description.replace("Here is the rewritten text:", '').replace(
+                           "Here is the refrased text:", ''),
                        date=milliseconds,
                        image=image,
                        channelParsed=sait,
@@ -79,20 +78,24 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
             if message.caption:
                 try:
                     if not containsAD(message.caption.lower()):
-                        query_to_GPT = f" {data_for_gpt} {message.caption}"
-                        desc: str = generateText(query_to_GPT)
+                        caption = message.caption
+
+                        if len(caption) >= 1000:
+                            capt = caption[:700]
+                        else:
+                            capt = caption
+
+                        query_to_GPT = f" {data_for_gpt} {capt}"
+                        description: str = generateText(query_to_GPT)
                         data_for_theme = (f"Here are all the topics I have: {themes},"
-                                          f" Which of these topics does this text relate to? {desc}, "
+                                          f" Which of these topics does this text relate to? {description}, "
                                           f"((choose only from these topics that I gave you))"
                                           f", give a simple answer where there will only be a topic")
-
-                        if len(desc) >= 230:
-                            description = ' '.join(desc.split()[:230])
-                            print(len(desc))
-                        else:
-                            description = desc
+                        hash_tags = generateText(f"{data_for_tag} {description}")
 
                         tit = generateText(f"{data_for_title} {description}")
+                        description = f"{description}\n{hash_tags}"
+
                         if len(tit) >= 10:
                             title = ' '.join(tit.split()[:10])
                             print(len(title))
@@ -118,7 +121,8 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             description = translateText('en', description)
 
                         pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                                           description=description.replace("Here is the rewritten text:", '').replace("Here is the refrased text:", ''),
+                                           description=description.replace("Here is the rewritten text:", '').replace(
+                                               "Here is the refrased text:", ''),
                                            date=milliseconds,
                                            image=image,
                                            channelParsed=source_channel_name,
@@ -181,6 +185,3 @@ async def parse(channels_en_id: dict, channel_go_to, language, list_links_site_p
             await clone_content_sait(sait, themes, channel_go_to, language)
     finally:
         await client.stop()
-
-
-
