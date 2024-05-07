@@ -1,4 +1,7 @@
 import datetime
+import random
+import re
+
 from api_manager import generateText, generateImage, get_themes, parsed_item
 from keys import API_ID, API_HASH, containsAD, find_word_in_text
 from pyrogram import Client
@@ -35,7 +38,10 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
                       f", give a simple answer where there will only be a topic")
 
     tit = generateText(f"{data_for_title} {description}")
-    description = f"{description}\n{hash_tags}"
+    description = f"{description}"
+    sentences = re.split(r'(?<=[.!?])\s+', description)
+    description = '\n\n'.join(' '.join(sentences[i:i + random.randint(1, 3)]) for i in range(0, len(sentences), random.randint(1, 3))).strip()
+    print(f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}")
     if len(tit) >= 12:
         title = ' '.join(tit.split()[:12])
         print(len(title))
@@ -61,8 +67,7 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = translateText('en', description)
 
     pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                       description=description.replace("Here is the rewritten text:", '').replace(
-                           "Here is the refrased text:", ''),
+                       description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}",
                        date=milliseconds,
                        image=image,
                        channelParsed=sait,
@@ -94,7 +99,9 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         hash_tags = generateText(f"{data_for_tag} {description}")
 
                         tit = generateText(f"{data_for_title} {description}")
-                        description = f"{description}\n{hash_tags}"
+                        description = f"{description}"
+                        sentences = re.split(r'(?<=[.!?])\s+', description)
+                        description = '\n\n'.join(' '.join(sentences[i:i + random.randint(2, 3)]) for i in range(0, len(sentences), random.randint(2, 3))).strip()
 
                         if len(tit) >= 10:
                             title = ' '.join(tit.split()[:10])
@@ -120,9 +127,10 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = translateText('en', title)
                             description = translateText('en', description)
 
+                        print(f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '').strip()} \n\n{hash_tags.strip()}")
+
                         pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                                           description=description.replace("Here is the rewritten text:", '').replace(
-                                               "Here is the refrased text:", ''),
+                                           description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}",
                                            date=milliseconds,
                                            image=image,
                                            channelParsed=source_channel_name,

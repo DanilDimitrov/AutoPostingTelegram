@@ -140,7 +140,7 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=20, minute=25, second=0, timezone='Europe/Kyiv')
+    scheduler.add_job(generate_posts, 'cron', hour=10, minute=40, second=0, timezone='Europe/Kyiv')
     scheduler.start()
     await dp.start_polling(bot)
 
