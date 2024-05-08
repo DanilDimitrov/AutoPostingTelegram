@@ -41,19 +41,15 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
     description = f"{description}"
     sentences = re.split(r'(?<=[.!?])\s+', description)
     description = '\n\n'.join(' '.join(sentences[i:i + random.randint(1, 3)]) for i in range(0, len(sentences), random.randint(1, 3))).strip()
-    print(f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}")
     if len(tit) >= 12:
         title = ' '.join(tit.split()[:12])
-        print(len(title))
     else:
         title = tit
     generateImagePrompt = f"generate prompt for generate beauty crypto image with this text: {title}"
-    print(generateImagePrompt)
     generateImagePromptExe = generateText(generateImagePrompt)
 
     theme = generateText(data_for_theme)
     theme = find_word_in_text(themes, theme)
-    print(theme)
     message_date = datetime.datetime.now()
     milliseconds = message_date.timestamp() * 1000
     image = generateImage(
@@ -67,13 +63,12 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = translateText('en', description)
 
     pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                       description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}",
+                       description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags}",
                        date=milliseconds,
                        image=image,
                        channelParsed=sait,
                        channel_go_to=channel_go_to,
                        prediction_theme=theme)
-    print(pars)
 
 
 async def clone_content(client, source_channel_id: int, themes, source_channel_name: str, channel_go_to: str, language):
@@ -105,16 +100,13 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
 
                         if len(tit) >= 10:
                             title = ' '.join(tit.split()[:10])
-                            print(len(title))
                         else:
                             title = tit
                         generateImagePrompt = f"generate prompt for generate beauty crypto image with this text: {title}"
-                        print(generateImagePrompt)
                         generateImagePromptExe = generateText(generateImagePrompt)
 
                         theme = generateText(data_for_theme)
                         theme = find_word_in_text(themes, theme)
-                        print(theme)
                         message_date = datetime.datetime.strptime(str(message.date), "%Y-%m-%d %H:%M:%S")
                         milliseconds = message_date.timestamp() * 1000
                         image = generateImage(
@@ -127,16 +119,13 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = translateText('en', title)
                             description = translateText('en', description)
 
-                        print(f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '').strip()} \n\n{hash_tags.strip()}")
-
                         pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                                           description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} {hash_tags}",
+                                           description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags}",
                                            date=milliseconds,
                                            image=image,
                                            channelParsed=source_channel_name,
                                            channel_go_to=channel_go_to,
                                            prediction_theme=theme)
-                        print(pars)
 
                 except:
                     print("Error in Pars")

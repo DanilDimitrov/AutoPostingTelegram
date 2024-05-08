@@ -30,7 +30,6 @@ async def sendMessage(chat_id, message, image):
     image = URLInputFile(
         image, filename="image.png"
     )
-    print(message)
     await bot.send_photo(chat_id=chat_id, caption=message, photo=image)
 
 
@@ -59,13 +58,12 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         if channel["list_links_site_parsing"]:
             cleaned_string = channel["list_links_site_parsing"].strip('[]\r\n')
             list_links_site_parsing = [link.strip() for link in cleaned_string.split(',')]
-            print(list_links_site_parsing)
 
         # Отправка на django db
         await parse(list_links_tg_parsing, name_channel, language, list_links_site_parsing)
 
         # Получение из django db
-        parse_result_no_unique = sorted(getParseItem(name_channel), key=lambda x: x["date"], reverse=True)
+        parse_result_no_unique = sorted(getParseItem(name_channel), key=lambda x: x["date"], reverse=False)
 
         # это для выбора уникальных постов
         unique_descriptions = set()
@@ -79,7 +77,6 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
             else:
                 pass
 
-        print(len(parse_result))
 
         total_posts = post_quantity + post_quantity_delta
         current_date = datetime.utcnow().date()
@@ -88,12 +85,10 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         for i in range(total_posts):
             post_time_for_current_post = initial_post_time + (i * timedelta(minutes=post_time_delta)) + timedelta(
                 minutes=post_time)
-            print(f"post_time_for_current_post: {post_time_for_current_post.strftime('%Y-%m-%d %H:%M:%S')}")
 
             post_content_for_current_post: dict = parse_result[i % len(parse_result)]
             caption = f"{post_content_for_current_post['title']} {post_content_for_current_post['description']}"
             image = post_content_for_current_post['image_url']
-            print(f"{saitUrl}{image}")
 
             scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
                               args=[name_channel_id, caption,
@@ -127,7 +122,6 @@ def crosslinkTg(crosslink, post_time_for_current_post,
 async def generate_posts():
     all_channels = getAllChannels()
     for channel in all_channels:
-        print(channel)
         if channel["autopost"]:
             post_time = channel["post_time"]
             post_time_delta = channel["post_time_delta"]
@@ -140,16 +134,18 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=10, minute=40, second=0, timezone='Europe/Kyiv')
+    scheduler.add_job(generate_posts, 'cron', hour=0, minute=5, second=0, timezone='UTC')
     scheduler.start()
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
     try:
         loop = asyncio.get_event_loop()
-        loop.create_task(mainFunc())
-        loop.run_forever()
-    except:
+        main_task = loop.create_task(mainFunc())
+        loop.run_until_complete(main_task)
+    except KeyboardInterrupt:
         scheduler.shutdown()
         loop.run_until_complete(bot.close())
+    finally:
+        loop.close()
 
