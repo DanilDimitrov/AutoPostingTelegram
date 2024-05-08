@@ -37,7 +37,6 @@ def generateImage(prompt):
         response = requests.post(to_generate_image, json=data)
         if response.status_code == 200:
             data = response.json()
-            print(data)
             return data
         else:
             print('Error:', response.status_code)
@@ -48,7 +47,6 @@ def generateText(prompt)-> str:
     response = requests.post(to_generate_text, json=data_to_load)
     if response.status_code == 200:
         data: list = response.json()
-        print(data)
         parse_data: str = (data[0]["generated_text"].replace("Тема этого текста в 5 словах:", "")
                           .replace("Вот тема в 5 словах:", "").replace("Тема:", "")
                           .replace("The theme of this text in 5 words is:", "")
@@ -68,7 +66,6 @@ def get_themes():
     response = requests.get(get_all_themes)
     if response.status_code == 200:
         data: list = response.json()["themes"]
-        print(data)
         return data
     else:
         print('Error:', response.status_code)
@@ -79,7 +76,6 @@ def getParseItem(channelGoTo):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()["parsed_items"]
-        print(data)
         return data
     else:
         print('Error:', response.status_code)
@@ -102,7 +98,6 @@ def parsed_item(title, description, date, image, channelParsed, channel_go_to, p
     response = requests.post(create_parse_item, files=files, data=data_to_load)
     if response.status_code == 200:
         data = response.json()
-        print(data)
         return data
     else:
         return None
@@ -112,7 +107,6 @@ def getAllChannels():
     response = requests.get(get_all_channels)
     if response.status_code == 200:
         data = response.json()["channels"]
-        print(f"data {data}")
         return data
     else:
         print('Error:', response.status_code)
@@ -122,7 +116,6 @@ def get_all_posts() -> list:
     response = requests.get(get_all_posts_url)
     if response.status_code == 200:
         data = response.json()["parsed_items"]
-        print(data)
         return data
     else:
         print('Error:', response.status_code)

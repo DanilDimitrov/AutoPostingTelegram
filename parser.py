@@ -63,7 +63,7 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         description = translateText('en', description)
 
     pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                       description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags}",
+                       description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags.strip()}",
                        date=milliseconds,
                        image=image,
                        channelParsed=sait,
@@ -120,7 +120,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             description = translateText('en', description)
 
                         pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
-                                           description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags}",
+                                           description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags.strip()}",
                                            date=milliseconds,
                                            image=image,
                                            channelParsed=source_channel_name,

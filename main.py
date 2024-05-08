@@ -35,7 +35,7 @@ async def sendMessage(chat_id, message, image):
 
 async def forwardMessage(sourceChatId, targetChatId):
     message_id = await get_last_message_id(sourceChatId)
-    await bot.forward_message(chat_id=targetChatId, from_chat_id=sourceChatId, message_id=message_id)
+    await bot.forward_message(chat_id=int(targetChatId), from_chat_id=int(sourceChatId), message_id=message_id)
 
 
 async def generate_posts_schedule(channel, post_time, post_time_delta, post_quantity, post_quantity_delta):
@@ -63,7 +63,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         await parse(list_links_tg_parsing, name_channel, language, list_links_site_parsing)
 
         # Получение из django db
-        parse_result_no_unique = sorted(getParseItem(name_channel), key=lambda x: x["date"], reverse=False)
+        parse_result_no_unique = sorted(getParseItem(name_channel), key=lambda x: x["id"], reverse=True)
 
         # это для выбора уникальных постов
         unique_descriptions = set()
@@ -87,7 +87,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
                 minutes=post_time)
 
             post_content_for_current_post: dict = parse_result[i % len(parse_result)]
-            caption = f"{post_content_for_current_post['title']} {post_content_for_current_post['description']}"
+            caption = f"{post_content_for_current_post['title'].strip()}\n\n {post_content_for_current_post['description']}"
             image = post_content_for_current_post['image_url']
 
             scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,
@@ -134,7 +134,7 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=0, minute=5, second=0, timezone='UTC')
+    scheduler.add_job(generate_posts, 'cron', hour=12, minute=43, second=0, timezone='UTC')
     scheduler.start()
     await dp.start_polling(bot)
 
