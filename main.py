@@ -87,7 +87,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
                 minutes=post_time)
 
             post_content_for_current_post: dict = parse_result[i % len(parse_result)]
-            caption = f"{post_content_for_current_post['title'].strip()}\n\n {post_content_for_current_post['description']}"
+            caption = f"{post_content_for_current_post['title'].strip()}\n\n{post_content_for_current_post['description']}"
             image = post_content_for_current_post['image_url']
 
             scheduler.add_job(sendMessage, 'date', run_date=post_time_for_current_post,

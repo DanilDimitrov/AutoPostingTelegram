@@ -12,7 +12,7 @@ from ru_sait_parse import *
 data_for_gpt = """rephrase this text in other words, remove all links and hyperlink,
                   remove all references to social networks from the text, text without unnecessary words,
                   I need exactly text, don’t return “Here is the rephrased text:” without your additions:"""
-data_for_title = "write the topic of this text in five words, but just write the topic without unnecessary words, I need exactly the topic, don’t return “[/INST]” without your additions:"
+data_for_title = "write the topic of this text in five words, but just write the topic without unnecessary words, I need exactly the topic, do not return “[/INST]” and “[INST]” without your additions, do not say “here is the topic”:"
 data_for_tag = "write 5 hash tag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions:"
 available_saits = [cryptoNews, ihodi, cointelegraph, coindesk, bitcoinist, decrypt,
                    forklog, coinspot, coinspot, ttrcoin, altcoinlog]

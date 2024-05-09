@@ -8,7 +8,7 @@ from keys import API_ID, API_HASH, containsAD, find_word_in_text
 from pyrogram import Client
 from api_manager import get_all_posts
 
-bot = Bot(token="7156398040:AAHkMiQ4ORAaN3OnXqK0hr45KaTWY1D9QCI")
+bot = Bot(token="6506417602:AAEoALt6bdbgC_rsTjxUNSGh5VGxP8nIVKo")
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 messages_id = []
 parse_result = []
@@ -27,11 +27,11 @@ def get_posts():
     unique_descriptions = set()
     for item in parse_result_no_unique:
         description = item['description']
-        if description not in unique_descriptions:
+        if (description not in unique_descriptions) and len(description) < 500:
             parse_result.append(item)
             unique_descriptions.add(description)
         else:
-            pass
+            continue
 
 
 async def get_chat_history(channel_id):
@@ -53,18 +53,17 @@ async def edit_posts(url, caption, post_id):
     )
     captionTrans = translateText("ru", caption)
     photo = types.InputMediaPhoto(media=image, caption=captionTrans, filename="image.png")
-    await bot.edit_message_media(chat_id=-1002111756303, message_id=post_id, media=photo)
+    await bot.edit_message_media(chat_id=-1001925019718, message_id=post_id, media=photo)
 
 
 async def mainFunc():
     get_posts()
-    await get_chat_history(-1002111756303)
+    await get_chat_history(-1001925019718)
     print(len(parse_result))
 
     for post_id, post in zip(messages_id, parse_result):
         try:
-            cap = (post['title'] + post['description']).split()
-            caption = ' '.join(cap[:100])
+            caption = (post['title'] + post['description'])
             photo_url = f"{saitUrl}{post['image_url']}"
             print(photo_url)
             await edit_posts(photo_url, caption, post_id)
