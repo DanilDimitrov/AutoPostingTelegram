@@ -9,7 +9,9 @@ from deep_translator import GoogleTranslator
 from en_sait_parse import *
 from ru_sait_parse import *
 
-data_for_gpt = """rephrase this text in other words, text without unnecessary words, I need exactly text, don’t return “Here is the rephrased text:” without your additions, do not add any extra words from yourself, write clearly and as I said:"""
+data_for_gpt = """rephrase this text in other words, text without unnecessary words,
+                     I need exactly text, don’t return “Here is the rephrased text:” without your additions, do not add any extra words from yourself, 
+                write clearly and as I said, do not write the source even if it is not there:"""
 data_for_title = "write the one topic of this text in only 5 words, but just write the topic without unnecessary words, I need exactly the topic, do not return “[/INST]” and “[INST]” without your additions, do not say “here is the topic” like this:'trump would like to buy btc', do not add any extra words from yourself, write clearly and as I said:"
 data_for_tag = "write only 5 hashtag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions, do not add any extra words from yourself, write clearly and as I said:"
 available_saits = [cryptoNews, ihodi, cointelegraph, coindesk, bitcoinist, decrypt,
@@ -60,7 +62,7 @@ async def go_to_admin(themes, sait, channel_go_to, language, text):
         title = translateText('en', title)
         description = translateText('en', description)
 
-    pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
+    pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", '').replace("Title:", ""),
                        description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags.strip()}",
                        date=milliseconds,
                        image=image,
@@ -116,11 +118,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = translateText('en', title)
                             description = translateText('en', description)
 
-                        print(title)
-                        print(description)
-                        print(hash_tags)
-
-                        pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
+                        pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", '').replace("Title:", ""),
                                            description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags.strip()}",
                                            date=milliseconds,
                                            image=image,

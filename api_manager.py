@@ -46,8 +46,8 @@ def generateText(prompt)-> str:
     data_to_load = {"prompt": prompt}
     response = requests.post(to_generate_text, json=data_to_load)
     if response.status_code == 200:
-        data: list = response.json()
-        parse_data: str = (data[0]["generated_text"].replace("Тема этого текста в 5 словах:", "")
+        res = response.text
+        parse_data: str = (res.replace("Тема этого текста в 5 словах:", "")
                           .replace("Вот тема в 5 словах:", "").replace("Тема:", "")
                           .replace("The theme of this text in 5 words is:", "")
                           .replace("Here is a theme for this text in 5 words:", "").replace("Theme:", "")
