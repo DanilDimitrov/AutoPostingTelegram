@@ -55,8 +55,6 @@ def generateText(prompt)-> str:
                           .replace("Here is the text rewritten in other words, without links and hyperlinks, and without references to social networks: ","")
                           .replace("Вот перефразированный текст:", "").replace("Вот переписанный текст:", "")
                           .replace("Вот текст, переписанный другими словами, без ссылок и гиперссылок, а также без отсылок к соцсетям:", ""))
-
-
         return parse_data
     else:
         print('Error:', response.status_code)

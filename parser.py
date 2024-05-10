@@ -9,11 +9,9 @@ from deep_translator import GoogleTranslator
 from en_sait_parse import *
 from ru_sait_parse import *
 
-data_for_gpt = """rephrase this text in other words, remove all links and hyperlink,
-                  remove all references to social networks from the text, text without unnecessary words,
-                  I need exactly text, don’t return “Here is the rephrased text:” without your additions:"""
-data_for_title = "write the topic of this text in five words, but just write the topic without unnecessary words, I need exactly the topic, do not return “[/INST]” and “[INST]” without your additions, do not say “here is the topic”:"
-data_for_tag = "write 5 hash tag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions:"
+data_for_gpt = """rephrase this text in other words, text without unnecessary words, I need exactly text, don’t return “Here is the rephrased text:” without your additions, do not add any extra words from yourself, write clearly and as I said:"""
+data_for_title = "write the one topic of this text in only 5 words, but just write the topic without unnecessary words, I need exactly the topic, do not return “[/INST]” and “[INST]” without your additions, do not say “here is the topic” like this:'trump would like to buy btc', do not add any extra words from yourself, write clearly and as I said:"
+data_for_tag = "write only 5 hashtag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions, do not add any extra words from yourself, write clearly and as I said:"
 available_saits = [cryptoNews, ihodi, cointelegraph, coindesk, bitcoinist, decrypt,
                    forklog, coinspot, coinspot, ttrcoin, altcoinlog]
 
@@ -79,13 +77,13 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                 try:
                     if not containsAD(message.caption.lower()):
                         caption = message.caption
-
                         if len(caption) >= 1000:
                             capt = caption[:700]
                         else:
                             capt = caption
 
                         query_to_GPT = f" {data_for_gpt} {capt}"
+
                         description: str = generateText(query_to_GPT)
                         data_for_theme = (f"Here are all the topics I have: {themes},"
                                           f" Which of these topics does this text relate to? {description}, "
@@ -97,7 +95,6 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                         description = f"{description}"
                         sentences = re.split(r'(?<=[.!?])\s+', description)
                         description = '\n\n'.join(' '.join(sentences[i:i + random.randint(2, 3)]) for i in range(0, len(sentences), random.randint(2, 3))).strip()
-
                         if len(tit) >= 10:
                             title = ' '.join(tit.split()[:10])
                         else:
@@ -119,6 +116,10 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = translateText('en', title)
                             description = translateText('en', description)
 
+                        print(title)
+                        print(description)
+                        print(hash_tags)
+
                         pars = parsed_item(title=title.replace("[/INST]", '').replace("[INST]", ''),
                                            description=f"{description.replace('Here is the rewritten text:', '').replace('Here is the refrased text:', '')} \n\n{hash_tags.strip()}",
                                            date=milliseconds,
@@ -127,8 +128,8 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                                            channel_go_to=channel_go_to,
                                            prediction_theme=theme)
 
-                except:
-                    print("Error in Pars")
+                except Exception as ex:
+                    print(f"Error in Pars: {ex}")
                     continue
 
     except Exception as e:

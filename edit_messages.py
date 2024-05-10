@@ -39,8 +39,9 @@ async def get_chat_history(channel_id):
     await client.start()
     try:
         async for message in client.get_chat_history(chat_id=channel_id):
-            message_id: int = message.id
-            messages_id.append(message_id)
+            if message.video:
+                message_id: int = message.id
+                messages_id.append(message_id)
         print(messages_id)
         return messages_id
     finally:
