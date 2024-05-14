@@ -9,9 +9,7 @@ from deep_translator import GoogleTranslator
 from en_sait_parse import *
 from ru_sait_parse import *
 
-data_for_gpt = """rephrase this text in other words, text without unnecessary words,
-                     I need exactly text, don’t return “Here is the rephrased text:” without your additions, do not add any extra words from yourself, 
-                write clearly and as I said, do not write the source even if it is not there:"""
+data_for_gpt = """rephrase this text in other words, remove all links to telegram channels and links to sources , text without unnecessary words, I need exactly text, don’t return“Here is the rephrased text:” without your additions, do not add any extra words from yourself,write clearly and as I said, do not write the source even if it is not there:"""
 data_for_title = "write the one topic of this text in only 5 words, but just write the topic without unnecessary words, I need exactly the topic, do not return “[/INST]” and “[INST]” without your additions, do not say “here is the topic” like this:'trump would like to buy btc', do not add any extra words from yourself, write clearly and as I said:"
 data_for_tag = "write only 5 hashtag for this text, but just write the hash tag without any extra words, I just need the hash tag, don’t return “[/INST]” without your additions, do not add any extra words from yourself, write clearly and as I said:"
 available_saits = [cryptoNews, ihodi, cointelegraph, coindesk, bitcoinist, decrypt,

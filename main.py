@@ -47,6 +47,9 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         crosslink_1_id: str = channel["crosslink_1_id"]
         crosslink_2_id: str = channel["crosslink_2_id"]
         crosslink_3_id: str = channel["crosslink_3_id"]
+        crosslink_4_id: str = channel["crosslink_4_id"]
+        crosslink_5_id: str = channel["crosslink_5_id"]
+
         crosslink: bool = channel["crosslink"]
         crosslink_time = channel["crosslink_time"]
         crosslink_delta = channel["crosslink_delta"]
@@ -85,6 +88,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
         for i in range(total_posts):
             post_time_for_current_post = initial_post_time + (i * timedelta(minutes=post_time_delta)) + timedelta(
                 minutes=post_time)
+            print(f"post_time_for_current_post: {post_time_for_current_post.strftime('%Y-%m-%d %H:%M:%S')}")
 
             post_content_for_current_post: dict = parse_result[i % len(parse_result)]
             caption = f"{post_content_for_current_post['title'].strip()}\n\n{post_content_for_current_post['description']}"
@@ -94,16 +98,23 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
                               args=[name_channel_id, caption,
                                     f"{saitUrl}{image}"
                                     ], max_instances=1)
-            crosslinkTg(crosslink, post_time_for_current_post,
+            try:
+                crosslinkTg(crosslink, post_time_for_current_post,
                         crosslink_time, crosslink_1_id, name_channel_id,
-                        crosslink_2_id, crosslink_3_id)
+                        crosslink_2_id, crosslink_3_id,
+                        crosslink_4_id, crosslink_5_id)
+            except Exception as ex:
+                print(ex)
+                continue
+
     except Exception as ex:
         print(f"error: {ex}")
 
 
 def crosslinkTg(crosslink, post_time_for_current_post,
                 crosslink_time, crosslink_1_id, name_channel_id,
-                crosslink_2_id, crosslink_3_id):
+                crosslink_2_id, crosslink_3_id,
+                crosslink_4_id, crosslink_5_id):
     if crosslink:
         crosslink_time_for_current_post = post_time_for_current_post + timedelta(hours=crosslink_time)
         print(f"crosslink_time_for_current_post: {crosslink_time_for_current_post.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -117,6 +128,12 @@ def crosslinkTg(crosslink, post_time_for_current_post,
         elif crosslink_3_id:
             scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
                               args=[name_channel_id, crosslink_3_id], max_instances=1)
+        elif crosslink_4_id:
+            scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                              args=[name_channel_id, crosslink_4_id], max_instances=1)
+        elif crosslink_5_id:
+            scheduler.add_job(forwardMessage, 'date', run_date=crosslink_time_for_current_post,
+                              args=[name_channel_id, crosslink_5_id], max_instances=1)
 
 
 async def generate_posts():
@@ -134,7 +151,7 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=21, minute=7, second=0, timezone='Europe/Kyiv')
+    scheduler.add_job(generate_posts, 'cron', hour=14, minute=22, second=0, timezone='Europe/Kyiv')
     scheduler.start()
     await dp.start_polling(bot)
 
