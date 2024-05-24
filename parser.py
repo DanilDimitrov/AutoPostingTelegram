@@ -22,8 +22,8 @@ def translateText(target_language_for_google, text):
 
 
 async def go_to_admin(themes, sait, channel_go_to, language, text):
-    if len(text) >= 1000:
-        capt = text[:700]
+    if len(text) >= 600:
+        capt = text[:600]
     else:
         capt = text
 
@@ -77,8 +77,8 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                 try:
                     if not containsAD(message.caption.lower()):
                         caption = message.caption
-                        if len(caption) >= 1000:
-                            capt = caption[:700]
+                        if len(caption) >= 600:
+                            capt = caption[:600]
                         else:
                             capt = caption
 
@@ -99,7 +99,7 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
                             title = ' '.join(tit.split()[:10])
                         else:
                             title = tit
-                        generateImagePrompt = f"generate prompt for generate beauty crypto image with this text: {title}"
+                        generateImagePrompt = f"generate little prompt  each new description must be separated by commas for generate beauty crypto image with this text: {title}"
                         generateImagePromptExe = generateText(generateImagePrompt)
 
                         theme = generateText(data_for_theme)
@@ -133,14 +133,13 @@ async def clone_content(client, source_channel_id: int, themes, source_channel_n
 
 
 async def get_last_message_id(channel_id) -> int:
-    client = Client(name='client', api_id=API_ID, api_hash=API_HASH)
-    await client.start()
-    try:
-        async for message in client.get_chat_history(chat_id=channel_id, limit=1):
-            message_id: int = message.id
-            return message_id
-    finally:
-        await client.stop()
+    async with Client(name='client', api_id=API_ID, api_hash=API_HASH) as client:
+        try:
+            async for message in client.get_chat_history(chat_id=channel_id, limit=1):
+                message_id: int = message.id
+                return message_id
+        except Exception as e:
+            print(e)
 
 
 async def clone_content_sait(sait, themes, channel_go_to, language):
@@ -169,13 +168,12 @@ async def clone_content_sait(sait, themes, channel_go_to, language):
 
 
 async def parse(channels_en_id: dict, channel_go_to, language, list_links_site_parsing: list):
-    client = Client(name='client', api_id=API_ID, api_hash=API_HASH)
-    await client.start()
-    try:
-        themes = get_themes()
-        for channel_name, channel_id in channels_en_id.items():
-            await clone_content(client, channel_id, themes, channel_name, channel_go_to, language)
-        for sait in list_links_site_parsing:
-            await clone_content_sait(sait, themes, channel_go_to, language)
-    finally:
-        await client.stop()
+    async with Client(name='client', api_id=API_ID, api_hash=API_HASH) as client:
+        try:
+            themes = get_themes()
+            for channel_name, channel_id in channels_en_id.items():
+                await clone_content(client, channel_id, themes, channel_name, channel_go_to, language)
+            for sait in list_links_site_parsing:
+                await clone_content_sait(sait, themes, channel_go_to, language)
+        except Exception as ex:
+            print(ex)

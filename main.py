@@ -34,7 +34,7 @@ async def sendMessage(chat_id, message, image):
 
 
 async def forwardMessage(sourceChatId, targetChatId):
-    message_id = await get_last_message_id(sourceChatId)
+    message_id = await get_last_message_id(int(sourceChatId))
     await bot.forward_message(chat_id=int(targetChatId), from_chat_id=int(sourceChatId), message_id=message_id)
 
 
@@ -139,7 +139,7 @@ def crosslinkTg(crosslink, post_time_for_current_post,
 async def generate_posts():
     all_channels = getAllChannels()
     for channel in all_channels:
-        if channel["autopost"]:
+        if channel["autopost"] and channel['folder_id'] == "crypto":
             post_time = channel["post_time"]
             post_time_delta = channel["post_time_delta"]
             post_quantity = channel["post_quantity"]
