@@ -35,19 +35,11 @@ def generateImage(prompt):
         print('Error:', response.status_code)
 
 
-def generateText(prompt)-> str:
+def generateText(prompt) -> str:
     data_to_load = {"prompt": prompt}
     response = requests.post(to_generate_text, json=data_to_load)
     if response.status_code == 200:
-        res = response.text
-        parse_data: str = (res.replace("Тема этого текста в 5 словах:", "")
-                          .replace("Вот тема в 5 словах:", "").replace("Тема:", "")
-                          .replace("The theme of this text in 5 words is:", "")
-                          .replace("Here is a theme for this text in 5 words:", "").replace("Theme:", "")
-                          .replace("Here is the rephrased text:", "").replace("Here is the rewritten text:", "")
-                          .replace("Here is the text rewritten in other words, without links and hyperlinks, and without references to social networks: ","")
-                          .replace("Вот перефразированный текст:", "").replace("Вот переписанный текст:", "")
-                          .replace("Вот текст, переписанный другими словами, без ссылок и гиперссылок, а также без отсылок к соцсетям:", ""))
+        parse_data = response.text
         return parse_data
     else:
         print('Error:', response.status_code)
