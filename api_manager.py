@@ -30,6 +30,7 @@ def generateImage(prompt):
     response = requests.post(to_generate_image, json=data)
     if response.status_code == 200:
         data = response.content
+        print(data)
         return data
     else:
         print('Error:', response.status_code)
@@ -72,9 +73,10 @@ def getParseItem(channelGoTo):
         print('Error:', response.status_code)
 
 
-def parsed_item(title, description, date, image, channelParsed, channel_go_to, prediction_theme):
-    buf = io.BytesIO()
+def parsed_item(title, description, date, image_bytes, channelParsed, channel_go_to, prediction_theme):
+    image = Image.open(io.BytesIO(image_bytes))
 
+    buf = io.BytesIO()
     image.save(buf, format='PNG')
     buf.seek(0)
     files = {'image': ('image.png', buf, 'image/png')}
@@ -110,5 +112,3 @@ def get_all_posts() -> list:
         return data
     else:
         print('Error:', response.status_code)
-
-
