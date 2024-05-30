@@ -26,20 +26,13 @@ def query(payload):
 
 
 def generateImage(prompt):
-    try:
-        image_bytes = query({
-            "inputs": prompt,
-        })
-        image = Image.open(io.BytesIO(image_bytes))
-        return image
-    except:
-        data = {"prompt": prompt}
-        response = requests.post(to_generate_image, json=data)
-        if response.status_code == 200:
-            data = response.json()
-            return data
-        else:
-            print('Error:', response.status_code)
+    data = {"prompt": prompt}
+    response = requests.post(to_generate_image, json=data)
+    if response.status_code == 200:
+        data = response.content
+        return data
+    else:
+        print('Error:', response.status_code)
 
 
 def generateText(prompt)-> str:
