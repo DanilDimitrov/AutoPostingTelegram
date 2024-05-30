@@ -70,13 +70,17 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
 
         # это для выбора уникальных постов
         unique_descriptions = set()
+        unique_title = set()
         parse_result = []
 
         for item in parse_result_no_unique:
             description = item['description']
-            if description not in unique_descriptions:
+            title = item['title'].lower()
+
+            if (description not in unique_descriptions) and (title not in unique_title):
                 parse_result.append(item)
                 unique_descriptions.add(description)
+                unique_title.add(title)
             else:
                 pass
 
