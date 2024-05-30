@@ -221,5 +221,3 @@ def parse_decrypt_article():
             print("No <p>")
     else:
         print("Failed.")
-
-

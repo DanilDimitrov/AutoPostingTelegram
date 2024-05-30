@@ -30,7 +30,6 @@ def generateImage(prompt):
     response = requests.post(to_generate_image, json=data)
     if response.status_code == 200:
         data = response.content
-        print(data)
         return data
     else:
         print('Error:', response.status_code)
