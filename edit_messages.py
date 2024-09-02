@@ -8,12 +8,12 @@ from keys import API_ID, API_HASH, containsAD, find_word_in_text
 from pyrogram import Client
 from api_manager import get_all_posts
 
-bot = Bot(token="6506417602:AAEoALt6bdbgC_rsTjxUNSGh5VGxP8nIVKo")
+bot = Bot(token="2232:вавава")
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 messages_id = []
 parse_result = []
 
-saitUrl = "http://138.201.33.30:999"
+saitUrl = "http://127.127.127.127:127"
 #saitUrl = "http://127.0.0.1:8000"
 
 
@@ -54,12 +54,12 @@ async def edit_posts(url, caption, post_id):
     )
     captionTrans = translateText("ru", caption)
     photo = types.InputMediaPhoto(media=image, caption=captionTrans, filename="image.png")
-    await bot.edit_message_media(chat_id=-1001925019718, message_id=post_id, media=photo)
+    await bot.edit_message_media(chat_id=-387863, message_id=post_id, media=photo)
 
 
 async def mainFunc():
     get_posts()
-    await get_chat_history(-1001925019718)
+    await get_chat_history(-275667284582)
     print(len(parse_result))
 
     for post_id, post in zip(messages_id, parse_result):

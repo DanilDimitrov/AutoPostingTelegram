@@ -2,13 +2,13 @@ import requests
 import io
 from PIL import Image
 
-to_generate_image = "http://138.201.33.30:5555/generate_image"
-to_generate_text = "http://138.201.33.30:5555/generate_text"
-get_all_themes = "http://138.201.33.30:999/themes"
-get_all_channels = "http://138.201.33.30:999/channels"
-get_parsed_item = "http://138.201.33.30:999/get_ParsedItems"
-create_parse_item = "http://138.201.33.30:999/create_parse_item/"
-get_all_posts_url = "http://138.201.33.30:999/get_all_posts/"
+to_generate_image = "http://127.091.00.11:5555/generate_image"
+to_generate_text = "http://127.091.00.11:5555/generate_text"
+get_all_themes = "http://127.091.00.11:999/themes"
+get_all_channels = "http://127.091.00.11:999/channels"
+get_parsed_item = "http://127.091.00.11:999/get_ParsedItems"
+create_parse_item = "http://127.091.00.11:999/create_parse_item/"
+get_all_posts_url = "http://127.091.00.11:999/get_all_posts/"
 
 # get_all_posts_url = "http://127.0.0.1:8000/get_all_posts/"
 # get_all_themes = "http://127.0.0.1:8000/themes"

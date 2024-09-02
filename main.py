@@ -18,7 +18,7 @@ dp = Dispatcher()
 scheduler = AsyncIOScheduler()
 executor = ThreadPoolExecutor()
 
-saitUrl = "http://138.201.33.30:999"
+saitUrl = "http://127.127.127.30:999"
 #saitUrl = "http://127.0.0.1:8000"
 
 
@@ -82,7 +82,7 @@ async def generate_posts_schedule(channel, post_time, post_time_delta, post_quan
                 unique_descriptions.add(description)
                 unique_title.add(title)
             else:
-                pass
+                continue
 
 
         total_posts = post_quantity + post_quantity_delta
@@ -155,7 +155,7 @@ async def generate_posts():
 
 async def mainFunc():
     #await generate_posts()
-    scheduler.add_job(generate_posts, 'cron', hour=15, minute=59, second=0, timezone='Europe/Kyiv')
+    scheduler.add_job(generate_posts, 'cron', hour=0, minute=7, second=0, timezone='UTC')
     scheduler.start()
     await dp.start_polling(bot)
 
